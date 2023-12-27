@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "work"
+version = "0.1.0"
+description = ""
+authors = ["tsuno <yuhei39.apollo@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.9.7 || >3.9.7,<3.13"
+langchain = "^0.0.352"
+python-dotenv = "^1.0.0"
+google-cloud-aiplatform = "^1.38.1"
+streamlit = "^1.29.0"
+wandb = "^0.16.1"
+google-cloud-bigquery = "^3.14.1"
+sqlalchemy-bigquery = "^1.9.0"
+ipykernel = "^6.28.0"
+google-cloud-bigquery-storage = "^2.24.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
