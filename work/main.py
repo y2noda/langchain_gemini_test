@@ -2,9 +2,9 @@
 import os
 
 import streamlit as st
-from agent_test import agent_executor
 from dotenv import load_dotenv
 from langchain.callbacks.streamlit import StreamlitCallbackHandler
+from lcel_agent_test import agent_executor
 
 os.environ["LANGCHAIN_WANDB_TRACING"] = "true"
 os.environ["WANDB_PROJECT"] = "langchain-testing-private"
@@ -14,8 +14,8 @@ env_path = os.path.join(base_dir, "../.env")
 load_dotenv(dotenv_path=env_path)
 
 # %%
-if "agent_chain" not in st.session_state:
-    st.session_state.agent_chain = agent_executor
+if "agent_executor" not in st.session_state:
+    st.session_state.agent_executor = agent_executor
 
 st.title("Langchain_gemini_test")
 
@@ -34,7 +34,8 @@ if prompt:
         st.markdown(prompt)
     with st.chat_message("assistant"):
         callback = StreamlitCallbackHandler(st.container())
-        response = st.session_state.agent_chain(prompt, callbacks=[callback])
+        # response = st.session_state.agent_executor(prompt, callbacks=[callback])
+        response = st.session_state.agent_executor.invoke({"input": prompt})["output"]
         st.markdown(response)
 
     st.session_state.messages.append({"role": "assistant", "content": response})

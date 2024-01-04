@@ -66,8 +66,15 @@ result = sql_response.invoke(
 ## 命令
 アプリユーザーのデータを抽出するためのSQLクエリを生成してください。クエリの目的は、プッシュ通知が配信された日から1週間以内にゲスト会員からアプリ本会員になったユーザーを見つけることです。
 制約条件は必ずすべて守ってください。
+SQLを生成する際には、SQL生成例を参考にしてください。
 
-### 制約条件
+## 条件
+- DatasetName は marketing_sample_data とします。
+- ProjectName は langchain-gemini-test とします。
+- プッシュ配信日は、"2023-11-15"として新たに定義します。データ型はDATE型です。
+
+
+## 制約条件
 - TIMESTAMP型のカラムは、DATE型に必ず変換して、使用してください。
 - 全てのテーブルの created_at のカラムのデータ型はTIMESTAMP型です。必ずDATE型に変換してください。
 - データ型に関するエラーが発生しないように、必ずデータ型を確認してください。
@@ -76,9 +83,6 @@ result = sql_response.invoke(
 - エイリアスを定義した場合は、後のクエリで必ずエイリアスを使用してください。
 - CTEを利用して、複雑なクエリを分割して、読みやすく、管理しやすいクエリにしてください。
 - アプリユーザーには、customer_no に値を持つアプリ本会員と customer_no が null のゲスト会員がいます。
-- プッシュ配信日は、"2023-11-15"として新たに定義します。データ型はDATE型です。
-- データセット名は marketing_sample_data とします。
-- プロジェクト名は langchain-gemini-test とします。
 - プッシュ通知日以前に会員になったユーザーを、ターゲットユーザーとして抽出するCTEを作成してください。
 - ターゲットユーザーの中から、プッシュ通知が配信された日から1週間以内にゲスト会員からアプリ本会員になったユーザーを抽出するCTEを作成してください。
 - 最終的に抽出するカラムは、カード番号、プッシュ配信日（2023-11-15）、本会員登録日です。
@@ -92,6 +96,41 @@ result = sql_response.invoke(
 - ORDER BYには、関数は含めないでください。
 - 命令に対して適切なカラムで並び替えを行うこと。
 - 集計関数を用いたカラムに対して必ずカラム名を付与すること。
+
+
+## SQL生成例
+```sql
+-- 複数のCTEを定義し、テーブルにエイリアスを使用
+WITH FirstCTE AS (
+  SELECT
+    FT.columnA,
+    FT.columnB
+  FROM
+    your_dataset.first_table AS FT
+  WHERE
+    FT.condition1 = 'value1'
+),
+SecondCTE AS (
+  SELECT
+    ST.columnC,
+    ST.columnD
+  FROM
+    your_dataset.second_table AS ST
+  WHERE
+    ST.condition2 = 'value2'
+)
+
+-- CTEを組み合わせて使用
+SELECT
+  f.columnA,
+  f.columnB,
+  s.columnC,
+  s.columnD
+FROM
+  FirstCTE f
+JOIN
+  SecondCTE s ON f.columnA = s.columnC
+```
 """
     }
 )
@@ -126,3 +165,5 @@ full_chain = (
 
 result = full_chain.invoke({"question": "How many users are there?"})
 print(result)
+
+# %%
