@@ -40,7 +40,7 @@ chat = ChatVertexAI(
     model="gemini-pro",
     max_output_tokens=2048,
     temperature=0,
-    top_p=0.9,
+    top_p=1,
     # top_k=40,
     verbose=True,
 )
@@ -192,9 +192,12 @@ agent_executor = create_sql_agent(
 result = agent_executor.run(
     """\
 ## 命令
-アプリユーザーのデータを抽出するためのSQLクエリを生成してください。クエリの目的は、プッシュ通知が配信された日から1週間以内にゲスト会員からアプリ本会員になったユーザーを見つけることです。
+アプリユーザーのデータを抽出するためのSQLクエリを生成してください。
 制約条件は必ずすべて守ってください。
 SQLを生成する際には、SQL生成例を参考にしてください。
+
+## クエリの目的
+クエリの目的は、プッシュ通知が配信された日から1週間以内にゲスト会員からアプリ本会員になったユーザーを見つけることです。
 
 ## 条件
 - DatasetName は marketing_sample_data とします。
